@@ -1,15 +1,20 @@
-<div alt style="text-align: center; transform: scale(.5);">
-	<picture>
-		<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/tldraw/tldraw/main/assets/github-hero-dark-draw.png" />
-		<img alt="tldraw" src="https://raw.githubusercontent.com/tldraw/tldraw/main/assets/github-hero-light-draw.png" />
-	</picture>
-</div>
+# TLDRAW NEXT JS 14 (APP style) starter template.
+#  THIS NEW II Version works with 2.4.4 version of tldraw since menu overrides has changed.
+# BONUS: "File open" and "File save" menu activated
+Use this repo as a template to create a simple tldraw sample:
 
-This repo contains a very basic example of how to use [tldraw](https://github.com/tldraw/tldraw) in a [Next.js](https://nextjs.org/) app using the src directory and App router.
+1. Use the template and clone your new repo to your computer
+2. Run `npm install` to install dependencies
+3. Run `npm run dev`
+4. Open [localhost:3000](http://localhost:3000) and test it is working.
 
-## License
 
-Whilst the code in this template is available under the MIT license, `tldraw` and `@tldraw/sync` are
-under the [tldraw license](https://github.com/tldraw/tldraw/blob/main/LICENSE.md) which does not
-allow their use for commercial purposes. To purchase an alternative license for commercial use,
-contact [sales@tldraw.com](mailto:sales@tldraw.com).
+
+
+##THANKS:
+
+Tldraw team for their efforts.
+Tldraw team for ["Make it real starter"](https://github.com/tldraw/make-real-starter) reprepository and ["examples"](https://github.com/tldraw/examples) repository.
+
+
+[Frederic Aoustin](https://github.com/fraoustin)  for help us writing the open/save code in this issue --> [https://github.com/tldraw/tldraw/issues/1650]
