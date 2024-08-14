@@ -11,7 +11,7 @@ import {
 	getSnapshot,
 	loadSnapshot
 } from 'tldraw'
-
+import 'tldraw/tldraw.css'
 
 const store = createTLStore()
 
@@ -97,7 +97,7 @@ export default function Home() {
 	return (
 		<main>
 			<div style={{ position: 'fixed', inset: 0 }}>
-				<Tldraw store={store} components={components} />
+				<Tldraw store={store} components={components}/>
 			</div>
 		</main>
 	)
