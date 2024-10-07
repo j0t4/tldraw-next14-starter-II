@@ -1,20 +1,23 @@
 # TLDRAW NEXT JS 14 (APP style) starter template.
-#  THIS NEW II Version works with 2.4.4 version of tldraw since menu overrides has changed.
-# BONUS: "File open" and "File save" menu activated
+## Updated to tldraw 3.2.0
+
+## LOOSED: "File open" and "File save" menu from last starter due ...
+##   "const store = useSync({ ..." do not export "loadSnapshot(store, ..."
+##                                 neither       "getSnapshot(store)"
+## Client and server cooperative user experience 
+
+### Client: npm run dev --> http://localhost:3000
+### Server: npm run server --> http://localhost:5858
+### room: (fixed) --> test-room 
+
+
 Use this repo as a template to create a simple tldraw sample:
 
 1. Use the template and clone your new repo to your computer
 2. Run `npm install` to install dependencies
-3. Run `npm run dev`
+3. Run `npm run dev` and in another terminal `npm run server`
 4. Open [localhost:3000](http://localhost:3000) and test it is working.
 
 
 
 
-##THANKS:
-
-Tldraw team for their efforts.
-Tldraw team for ["Make it real starter"](https://github.com/tldraw/make-real-starter) reprepository and ["examples"](https://github.com/tldraw/examples) repository.
-
-
-[Frederic Aoustin](https://github.com/fraoustin)  for help us writing the open/save code in this issue --> [https://github.com/tldraw/tldraw/issues/1650]

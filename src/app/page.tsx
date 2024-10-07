@@ -1,103 +1,99 @@
 'use client'
+import { useSync } from '@tldraw/sync'
 import {
 	Tldraw,
-	DefaultMainMenu,
-	DefaultMainMenuContent,
-	TLComponents,
-	TldrawUiMenuGroup,
-	TldrawUiMenuItem,
-	TldrawUiMenuSubmenu,
-	createTLStore,
-	getSnapshot,
-	loadSnapshot
+	AssetRecordType,
+	getHashForString,
+	TLAssetStore,
+	TLBookmarkAsset,
+	uniqueId,
 } from 'tldraw'
 import 'tldraw/tldraw.css'
 
-const store = createTLStore()
+const WORKER_URL = `http://localhost:5858`
+const roomId = 'test-room'
 
-function CustomMainMenu() {
+const multiplayerAssets: TLAssetStore = {
+	// to upload an asset, we prefix it with a unique id, POST it to our worker, and return the URL
+	async upload(_asset: any, file: any) {
+		const id = uniqueId()
 
-	return (
-		<DefaultMainMenu>
-			<div style={{ backgroundColor: 'white' }}>
-				<TldrawUiMenuSubmenu id="file"
-					label="File"
-				>
-					<TldrawUiMenuGroup id="file">
-						<TldrawUiMenuItem
-							id="load"
-							label="Load File"
-							icon="external-link"
-							readonlyOk
-							onSelect={() => {
+		const objectName = `${id}-${file.name}`
+		const url = `${WORKER_URL}/uploads/${encodeURIComponent(objectName)}`
 
-								const input = document.createElement("input");
-								input.type = "file";
-								input.onchange = function (event) {
-									try {
-										let files = input.files;
-										if (files !== null) {
-											if (files.length > 0) {
-												let file = files[0];
-												if (file !== null) {
-													let reader = new FileReader();
-													const self = this;
-													reader.onload = (event) => {
-														if (event.target !== null) {
-															const result = event.target.result as string;
-															if (result !== null) {
-																loadSnapshot(store, JSON.parse(result));
-																console.log('FILE CONTENT', JSON.parse(result))
-															};
-														}
-													};
-													reader.readAsText(file);
-												}
-											}
-										}
-									} catch (err) {
-										console.error(err);
-									}
-								};
-								input.click();
+		const response = await fetch(url, {
+			method: 'PUT',
+			body: file,
+		})
 
-							}}
-						/>
-						<TldrawUiMenuItem
-							id="Save"
-							label="Save File"
-							icon="external-link"
-							readonlyOk
-							onSelect={() => {
-								const snapshot = getSnapshot(store);
-								//console.log(JSON.stringify(snapshot));
-								const link = document.createElement("a");
-								const file = new Blob([JSON.stringify(snapshot)], { type: 'text/plain' });
-								link.href = URL.createObjectURL(file);
-								link.download = "sample.tldr";
-								link.click();
-								URL.revokeObjectURL(link.href);
-							}}
-						/>
-					</TldrawUiMenuGroup>
-				</TldrawUiMenuSubmenu>
-			</div>
-			<DefaultMainMenuContent />
-		</DefaultMainMenu>
-	)
+		if (!response.ok) {
+			throw new Error(`Failed to upload asset: ${response.statusText}`)
+		}
+
+		return url
+	},
+	// to retrieve an asset, we can just use the same URL. you could customize this to add extra
+	// auth, or to serve optimized versions / sizes of the asset.
+	resolve(asset: any) {
+		return asset.props.src
+	},
 }
+	
+// How does our server handle bookmark unfurling?
+async function unfurlBookmarkUrl({ url }: { url: string }): Promise<TLBookmarkAsset> {
+	const asset: TLBookmarkAsset = {
+		id: AssetRecordType.createId(getHashForString(url)),
+		typeName: 'asset',
+		type: 'bookmark',
+		meta: {},
+		props: {
+			src: url,
+			description: '',
+			image: '',
+			favicon: '',
+			title: '',
+		},
+	}
 
+	try {
+		const response = await fetch(`${WORKER_URL}/unfurl?url=${encodeURIComponent(url)}`)
+		const data = await response.json()
 
-const components: TLComponents = {
-	MainMenu: CustomMainMenu,
+		asset.props.description = data?.description ?? ''
+		asset.props.image = data?.image ?? ''
+		asset.props.favicon = data?.favicon ?? ''
+		asset.props.title = data?.title ?? ''
+	} catch (e) {
+		console.error(e)
+	}
+
+	return asset
 }
 
 
 export default function Home() {
+
+	const store = useSync({
+		// We need to know the websocket's URI...
+		uri: `${WORKER_URL}/connect/${roomId}`,
+		// ...and how to handle static assets like images & videos
+		assets: multiplayerAssets,
+	})
+
 	return (
 		<main>
 			<div style={{ position: 'fixed', inset: 0 }}>
-				<Tldraw store={store} components={components}/>
+			<Tldraw
+				// we can pass the connected store into the Tldraw component which will handle
+				// loading states & enable multiplayer UX like cursors & a presence menu
+				store={store}
+				onMount={(editor) => {
+					// @ts-expect-error
+					window.editor = editor
+					// when the editor is ready, we need to register out bookmark unfurling service
+					editor.registerExternalAssetHandler('url', unfurlBookmarkUrl)
+				}}
+			/>
 			</div>
 		</main>
 	)
