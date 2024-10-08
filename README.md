@@ -1,17 +1,22 @@
 # TLDRAW NEXT JS 14 (APP style) starter template.
-## Updated to tldraw 3.2.0
+### Updated to tldraw 3.2.0
+###  INCLUDED: cooperative user experience 
+- Client: npm run dev --> http://localhost:3000
 
-## LOOSED: "File open" and "File save" menu from last starter due ...
-##   "const store = useSync({ ..." do not export "loadSnapshot(store, ..."
-##                                 neither       "getSnapshot(store)"
-## Client and server cooperative user experience 
+- Server: npm run server --> http://localhost:5858
 
-### Client: npm run dev --> http://localhost:3000
-### Server: npm run server --> http://localhost:5858
-### room: (fixed) --> test-room 
+- room: (hardcoded) --> test-room 
+
+###  INCLUDED: "File open" and "File save" in main menu.
+
+- There is no "getsnapshot(store)"  or "loadSnapshot(store, ..."  when store comes from "const store = useSync({..."
+
+- We need to use "const editor = useEditor()" --> and then --> "loadSnapshot(editor.store, ..." or "getSnapshot(editor.store);"    
 
 
-Use this repo as a template to create a simple tldraw sample:
+
+
+### Use this repo as a template to create a simple tldraw sample:
 
 1. Use the template and clone your new repo to your computer
 2. Run `npm install` to install dependencies

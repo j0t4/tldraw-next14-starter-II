@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig_base.json",
+  //"extends": "./tsconfig_base.json",
   "include": [
     "src",
     "scripts",
@@ -7,6 +7,7 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
+    //"src/server",
     "node_modules",
     "dist",
     ".tsbuild*"
@@ -14,9 +15,7 @@
   "compilerOptions": {
     "noEmit": true,
     "emitDeclarationOnly": false,
-    "types": [
-      "node"
-    ],
+    "target": "es2015",
     "allowJs": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -24,7 +23,19 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "skipLibCheck": true,
+    "strict": false,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
   "references": []
 }

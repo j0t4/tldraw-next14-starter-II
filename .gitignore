@@ -5,6 +5,8 @@
 /.pnp
 .pnp.js
 package-lock.json
+/.assets
+/.rooms
 
 # testing
 /coverage
