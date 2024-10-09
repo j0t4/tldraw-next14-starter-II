@@ -1,0 +1,11 @@
+:8080 {
+	file_server {
+		root ./out
+	}
+	@websockets {
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+	reverse_proxy @websockets localhost:5858
+	reverse_proxy /uploads/*  localhost:5858
+}

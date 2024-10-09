@@ -20,7 +20,7 @@ import {
 } from 'tldraw'
 import 'tldraw/tldraw.css'
 
-const WORKER_URL = `http://localhost:5858`
+const WORKER_URL = `http://localhost:8080`
 const roomId = 'test-room'
 
 function CustomMainMenu() {
@@ -141,7 +141,6 @@ async function unfurlBookmarkUrl({ url }: { url: string }): Promise<TLBookmarkAs
 	try {
 		const response = await fetch(`${WORKER_URL}/unfurl?url=${encodeURIComponent(url)}`)
 		const data = await response.json()
-
 		asset.props.description = data?.description ?? ''
 		asset.props.image = data?.image ?? ''
 		asset.props.favicon = data?.favicon ?? ''
